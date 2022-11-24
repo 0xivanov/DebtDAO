@@ -2,4 +2,3 @@ cache/
 out/
 .env
 node_modules/
-remappings.txt
