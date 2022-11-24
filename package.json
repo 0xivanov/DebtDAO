@@ -13,9 +13,7 @@
   "devDependencies": {
     "pre-commit": "^1.2.2"
   },
-  "pre-commit": [
-    "install",
-    "test",
-    "gas:snapshot"
-  ]
+  "pre-commit": {
+    "run": "install, test, gas:snapshot"
+  }
 }
