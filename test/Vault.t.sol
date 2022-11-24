@@ -14,7 +14,7 @@ contract VaultTest is Test {
     address public deployer;
     address public user;
     MockERC20 weth;
-    MockERC20 wbtc; sdfasdf
+    MockERC20 wbtc;
     MockPriceFeed wethFeed;
     MockPriceFeed wbtcFeed;
     Vault vault;
