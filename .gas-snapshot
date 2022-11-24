@@ -1,0 +1,4 @@
+VaultTest:testInitializer() (gas: 10511)
+VaultTest:testTakeLoan() (gas: 266709)
+VaultIntegrationTest:testInitializer() (gas: 10511)
+VaultIntegrationTest:testTakeLoan() (gas: 287553)

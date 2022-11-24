@@ -1,0 +1,21 @@
+{
+  "name": "debtdao",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Ivan Ivanov",
+  "license": "ISC",
+  "scripts": {
+    "test": "forge test",
+    "compile": "forge compile",
+    "install": "forge install",
+    "gas:snapshot": "forge snapshot"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "install",
+    "test",
+    "gas:snapshot"
+  ]
+}
