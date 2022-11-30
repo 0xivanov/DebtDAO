@@ -15,13 +15,15 @@ contract VaultTest is Test {
     address public user;
     MockERC20 weth;
     MockERC20 wbtc;
-    MockPriceFeed wethFeed;
-    MockPriceFeed wbtcFeed;
+    MockPriceFeed ethFeed;
+    MockPriceFeed btcFeed;
     Vault vault;
     VaultUtils utils = new VaultUtils();
     IVault vaultClone;
     StableCoin stablecoin;
     VaultFactory factory;
+    int256 constant ethPrice = 121479000000;
+    int256 constant btcPrice = 1647442138012;
 
     function setUp() public {
         {
@@ -32,17 +34,16 @@ contract VaultTest is Test {
             vm.prank(deployer);
             weth = new MockERC20("weth", "weth");
             wbtc = new MockERC20("wbtc", "wbtc");
-            wethFeed = new MockPriceFeed();
-            wethFeed.setDecimals(18);
-            wethFeed.setTimestamp(block.timestamp);
-            wethFeed.setLatestAnswer(int256(100000000000));
-            wbtcFeed = new MockPriceFeed();
-            wbtcFeed.setDecimals(18);
-            wbtcFeed.setTimestamp(block.timestamp);
-            wbtcFeed.setLatestAnswer(int256(1500000000000));
+            ethFeed = new MockPriceFeed();
+            ethFeed.setTimestamp(block.timestamp);
+
+            ethFeed.setLatestAnswer(int256(ethPrice));
+            btcFeed = new MockPriceFeed();
+            btcFeed.setTimestamp(block.timestamp);
+            btcFeed.setLatestAnswer(int256(btcPrice));
             vault = new Vault();
             factory =
-            new VaultFactory(3, address(vault), address(weth), address(wbtc), address(wbtcFeed), address(wethFeed), address(wethFeed));
+                new VaultFactory(3, address(vault), address(weth), address(wbtc), address(btcFeed), address(ethFeed));
             stablecoin = StableCoin(factory.stablecoin());
         }
         {
@@ -56,16 +57,25 @@ contract VaultTest is Test {
         }
     }
 
-    function testTakeLoan() public {
+    function testHappyPath() public {
         vaultClone.takeLoan{value: 1 ether}(Collateral(1 ether, 1 ether, 1 ether), 200);
         assertEq(vaultClone.ethCollateral(), 1 ether);
         assertEq(weth.balanceOf(address(vaultClone)), 1 ether);
         assertEq(wbtc.balanceOf(address(vaultClone)), 1 ether);
-        console.log(vaultClone.debt());
-    }
+        assertEq(vaultClone.collateralizationPercentage(), 200);
 
-    function testInitializer() public {
-        vm.expectRevert(AlreadyInitialized.selector);
-        vault.initialize(address(this));
+        vaultClone.takeLoan{value: 0.2 ether}(Collateral(0.2 ether, 0 ether, 1.4 ether), 160); //increase loan
+        assertEq(vaultClone.ethCollateral(), 1.2 ether);
+        assertEq(weth.balanceOf(address(vaultClone)), 1 ether);
+        assertEq(wbtc.balanceOf(address(vaultClone)), 2.4 ether);
+        assertEq(vaultClone.collateralizationPercentage(), 160);
+        assertEq(vaultClone.totalCollateralInDollars(), 42211149312288000000000);
+        assertEq(vaultClone.debt(), 42211149312288000000000 * 10 / 16);
+
+        vaultClone.payLoan();
+        console.log(vaultClone.debt());
+        console.log(vaultClone.totalCollateralInDollars());
+        console.log(vaultClone.collateralizationPercentage());
+        console.log(wbtc.balanceOf(address(vaultClone)));
     }
 }

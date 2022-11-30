@@ -13,8 +13,7 @@ contract VaultIntegrationTest is Test {
     address public deployer;
     address public user;
     string MAINNET_RPC_URL = vm.envString("MAINNET_RPC_URL");
-    address wbtcAggregator = 0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c;
-    address wethAggregator = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419;
+    address btcAggregator = 0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c;
     address ethAggregator = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419;
     MockERC20 weth;
     MockERC20 wbtc;
@@ -36,8 +35,7 @@ contract VaultIntegrationTest is Test {
         weth = new MockERC20("weth", "weth");
         wbtc = new MockERC20("wbtc", "wbtc");
         vault = new Vault();
-        factory =
-        new VaultFactory(3, address(vault), address(weth), address(wbtc), wbtcAggregator, wethAggregator, ethAggregator);
+        factory = new VaultFactory(3, address(vault), address(weth), address(wbtc), btcAggregator, ethAggregator);
         stablecoin = StableCoin(factory.stablecoin());
 
         vm.startPrank(user);

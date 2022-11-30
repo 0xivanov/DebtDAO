@@ -21,16 +21,16 @@ interface IVault {
     function totalCollateralInDollars() external returns (uint256);
     function debt() external returns (uint256);
     function initialized() external returns (bool);
-    function collateralizationPercentage() external returns (uint8);
+    function collateralizationPercentage() external returns (uint256);
     function liquidationThreshold() external returns (uint8);
     function maxOracleFreshness() external returns (uint64);
     function initialize(address _debter) external;
 
-    function takeLoan(Collateral memory collateral, uint8 collateralizationPercentage)
+    function takeLoan(Collateral memory collateral, uint256 collateralizationPercentage)
         external
         payable
         returns (uint256);
     function payLoan() external;
-    function increaseCollateral(Collateral calldata collateral) external payable;
+    //function increaseCollateral(Collateral calldata collateral) external payable;
     function liquidate() external;
 }

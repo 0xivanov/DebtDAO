@@ -9,8 +9,7 @@ import {StableCoin} from "src/Stablecoin.sol";
 
 contract VaultFactory {
     //feed
-    AggregatorV3Interface public wbtcAggregator;
-    AggregatorV3Interface public wethAggregator;
+    AggregatorV3Interface public btcAggregator;
     AggregatorV3Interface public ethAggregator;
     //auth
     address public owner;
@@ -32,8 +31,7 @@ contract VaultFactory {
         address _vaultImplementation,
         address _weth,
         address _wbtc,
-        address _wbtcAggregator,
-        address _wethAggregator,
+        address _btcAggregator,
         address _ethAggregator
     ) {
         owner = msg.sender;
@@ -41,8 +39,7 @@ contract VaultFactory {
         vaultImplementation = _vaultImplementation;
         weth = ERC20(_weth);
         wbtc = ERC20(_wbtc);
-        wbtcAggregator = AggregatorV3Interface(_wbtcAggregator);
-        wethAggregator = AggregatorV3Interface(_wethAggregator);
+        btcAggregator = AggregatorV3Interface(_btcAggregator);
         ethAggregator = AggregatorV3Interface(_ethAggregator);
         stablecoin = new StableCoin("mock", "mock", address(this));
     }
