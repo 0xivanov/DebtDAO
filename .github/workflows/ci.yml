@@ -26,8 +26,5 @@ jobs:
       - name: Create .env file
         run: touch .env && echo MAINNET_RPC_URL=${MAINNET_RPC_URL} > .env && cat .env
 
-      - name: Check gas snapshots
-        run: forge snapshot --check
-
       - name: Run tests
         run: forge test
